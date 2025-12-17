@@ -50,5 +50,8 @@ public class User {
         this.updatedAt = Instant.now();
     }
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider = Provider.LOCAL;
+
 
 }
