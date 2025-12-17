@@ -1,7 +1,7 @@
 # QuizIt 
 
-QuizIt is a secure, customizable quiz and examination platform** designed for colleges and institutions.  
-It supports online, offline (LAN-based) quizzes with real-time control, advanced analytics, and ML-assisted cheat detection**.
+QuizIt is a secure, customizable quiz and examination platform designed for colleges and institutions.  
+It supports online, offline (LAN-based) quizzes with real-time control, advanced analytics, and ML-assisted cheat detection.
 
 ---
 
