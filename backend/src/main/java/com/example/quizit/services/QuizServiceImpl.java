@@ -6,6 +6,7 @@ import com.example.quizit.entities.Quiz;
 import com.example.quizit.exceptions.ResourceNotFoundException;
 import com.example.quizit.helpers.UserHelper;
 import com.example.quizit.repositories.QuizRepository;
+import com.example.quizit.repositories.UserRepository;
 import com.example.quizit.services.interfaces.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,23 +21,34 @@ public class QuizServiceImpl implements QuizService {
 
     private final QuizRepository quizRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     @Override
     public QuizDto createQuiz(QuizDto quizDto) {
-        if(quizDto.getQuizName() == null || quizDto.getHost() == null){
-            throw new IllegalArgumentException("Quiz name is required");
+        if (quizDto.getQuizName() == null || quizDto.getHost() == null) {
+            throw new IllegalArgumentException("Quiz name and host are required");
         }
-        if(quizRepository.existsByQuizNameAndHostId(quizDto.getQuizName(), quizDto.getHost())){
+        if (quizRepository.existsByQuizNameAndHostId(
+                quizDto.getQuizName(), quizDto.getHost())) {
             throw new IllegalArgumentException("Quiz already exists");
         }
-        Quiz quiz = modelMapper.map(quizDto, Quiz.class);
+        Quiz quiz = new Quiz();
+        quiz.setQuizName(quizDto.getQuizName());
+        quiz.setQuizType(quizDto.getQuizType());
+        quiz.setMode(quizDto.getMode());
+        quiz.setStartTime(quizDto.getStartTime());
+        quiz.setEndTime(quizDto.getEndTime());
+        quiz.setHost(
+                userRepository.getReferenceById(quizDto.getHost())
+        );
         Quiz savedQuiz = quizRepository.save(quiz);
         return modelMapper.map(savedQuiz, QuizDto.class);
     }
 
+
     @Override
     public QuizDto updateQuiz(String quizId, QuizDto quizDto) {
-        if(quizDto == null){
+        if (quizDto == null) {
             throw new IllegalArgumentException("Quiz data is required");
         }
         UUID quizUUID = UserHelper.parseUUID(quizId);
@@ -45,11 +57,11 @@ public class QuizServiceImpl implements QuizService {
         /*
             quizName, quizType, mode, startTime, endTime
         */
-        if(quizDto.getQuizName() != null) existingQuiz.setQuizName(quizDto.getQuizName());
-        if(quizDto.getQuizType() != null) existingQuiz.setQuizType(quizDto.getQuizType());
-        if(quizDto.getMode() != null) existingQuiz.setMode(quizDto.getMode());
-        if(quizDto.getStartTime() != null) existingQuiz.setStartTime(quizDto.getStartTime());
-        if(quizDto.getEndTime() != null) existingQuiz.setEndTime(quizDto.getEndTime());
+        if (quizDto.getQuizName() != null) existingQuiz.setQuizName(quizDto.getQuizName());
+        if (quizDto.getQuizType() != null) existingQuiz.setQuizType(quizDto.getQuizType());
+        if (quizDto.getMode() != null) existingQuiz.setMode(quizDto.getMode());
+        if (quizDto.getStartTime() != null) existingQuiz.setStartTime(quizDto.getStartTime());
+        if (quizDto.getEndTime() != null) existingQuiz.setEndTime(quizDto.getEndTime());
 
         Quiz savedQuiz = quizRepository.save(existingQuiz);
 
@@ -58,7 +70,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizDto getQuizById(String quizId) {
-        if(quizId == null){
+        if (quizId == null) {
             throw new IllegalArgumentException("Quiz id is null");
         }
         UUID quizUUID = UserHelper.parseUUID(quizId);
@@ -81,7 +93,7 @@ public class QuizServiceImpl implements QuizService {
     public List<QuizDto> getAllQuizzes() {
         return quizRepository.findAll()
                 .stream()
-                .map(quiz->modelMapper.map(quiz, QuizDto.class))
+                .map(quiz -> modelMapper.map(quiz, QuizDto.class))
                 .toList();
     }
 
