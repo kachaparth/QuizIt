@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -28,12 +29,13 @@ public class Question {
     private String content;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Object options;
+    @Column(name = "correct_answer", columnDefinition = "jsonb")
+    private Map<String, Object> correctAnswer;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "correct_answer",columnDefinition = "jsonb")
-    private Object correctAnswer;
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> options;
+
 
     private Integer duration;
 

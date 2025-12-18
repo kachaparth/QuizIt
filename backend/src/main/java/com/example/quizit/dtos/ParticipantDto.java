@@ -16,8 +16,8 @@ import java.util.UUID;
 public class ParticipantDto {
 
     private UUID participantId;
-    private Quiz quiz;
-    private User user;
+    private UUID quiz;
+    private UUID user;
     private ParticipantStatus status;
     private LocalDateTime joinedAt;
 

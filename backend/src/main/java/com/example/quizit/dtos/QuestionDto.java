@@ -2,8 +2,12 @@ package com.example.quizit.dtos;
 
 import com.example.quizit.entities.Quiz;
 import com.example.quizit.enums.DifficultyLevel;
+import jakarta.persistence.Column;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -15,10 +19,10 @@ import java.util.UUID;
 public class QuestionDto {
 
     private UUID questionId;
-    private Quiz quiz;
+    private UUID quizId;
     private String content;
-    private Object options;
-    private Object correctAnswer;
+    private Map<String, Object> correctAnswer;
+    private Map<String, Object> options;
     private Integer duration;
     private String questionType;
     private DifficultyLevel difficultyLevel;

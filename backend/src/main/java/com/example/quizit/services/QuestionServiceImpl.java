@@ -2,9 +2,12 @@ package com.example.quizit.services;
 
 import com.example.quizit.dtos.QuestionDto;
 import com.example.quizit.entities.Question;
+import com.example.quizit.entities.Quiz;
 import com.example.quizit.exceptions.ResourceNotFoundException;
 import com.example.quizit.helpers.UserHelper;
 import com.example.quizit.repositories.QuestionRepository;
+import com.example.quizit.repositories.QuizRepository;
+import com.example.quizit.repositories.UserRepository;
 import com.example.quizit.services.interfaces.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +21,7 @@ import java.util.UUID;
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuizRepository quizRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -40,21 +44,26 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
-    @Override
     public QuestionDto createQuestion(QuestionDto questionDto) {
 
-        if(questionDto.getQuiz() == null ) {
-            throw new IllegalArgumentException("Quiz is required");
+        if (questionDto.getQuizId() == null) {
+            throw new IllegalArgumentException("Quiz ID is required");
         }
-        if(questionDto.getCorrectAnswer() == null || questionDto.getCorrectAnswer().equals("") ) {
+
+        if (questionDto.getCorrectAnswer() == null) {
             throw new IllegalArgumentException("Correct answer is required");
         }
-        if (questionDto.getDuration() == null || questionDto.getDuration().equals("") ) {
+
+        if (questionDto.getDuration() == null) {
             throw new IllegalArgumentException("Duration is required");
         }
 
-        Question que =  modelMapper.map(questionDto, Question.class);
-        Question savedQuestion = questionRepository.save(que);
+        Quiz quiz = quizRepository.findById(questionDto.getQuizId())
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
+
+        Question question = modelMapper.map(questionDto, Question.class);
+        question.setQuiz(quiz);
+        Question savedQuestion = questionRepository.save(question);
         return modelMapper.map(savedQuestion, QuestionDto.class);
     }
 
@@ -67,17 +76,28 @@ public class QuestionServiceImpl implements QuestionService {
          UUID  uuid = UserHelper.parseUUID(id);
 
         Question existingQuestion = questionRepository.findById(uuid).orElseThrow(()-> new ResourceNotFoundException("Question not found!"));
-        if(questionDto.getQuiz() != null ) {
-            existingQuestion.setQuiz(questionDto.getQuiz());
+
+
+        if(questionDto.getQuizId() != null ) {
+         Quiz quiz = quizRepository.findById(questionDto.getQuizId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
+
+            existingQuestion.setQuiz(quiz);
         }
-        if(questionDto.getCorrectAnswer() != null &&  !questionDto.getCorrectAnswer().equals("") ) {
+        if (questionDto.getCorrectAnswer() != null) {
             existingQuestion.setCorrectAnswer(questionDto.getCorrectAnswer());
         }
-        if (questionDto.getDuration() != null && !questionDto.getDuration().equals("") ) {
+        if (questionDto.getDuration() != null) {
             existingQuestion.setDuration(questionDto.getDuration());
         }
-        questionRepository.save(existingQuestion);
-        return null;
+
+            existingQuestion.setContent(questionDto.getContent());
+            existingQuestion.setQuestionType(questionDto.getQuestionType());
+            existingQuestion.setDifficultyLevel(questionDto.getDifficultyLevel());
+            existingQuestion.setOptions(questionDto.getOptions());
+
+        Question newQuestion=    questionRepository.save(existingQuestion);
+        return modelMapper.map(newQuestion, QuestionDto.class);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.example.quizit.dtos;
 
 import com.example.quizit.entities.Question;
-import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 @Getter
@@ -12,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class QuestionAnalyticsUser {
+public class QuestionAnalyticsUserDto {
 
     private UUID qauId;
     private Question question;
