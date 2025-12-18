@@ -91,6 +91,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public List<QuizDto> getAllQuizzes() {
+        System.out.println("get all quizzess called");
         return quizRepository.findAll()
                 .stream()
                 .map(quiz -> modelMapper.map(quiz, QuizDto.class))
