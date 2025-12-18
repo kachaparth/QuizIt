@@ -1,5 +1,6 @@
 package com.example.quizit.entities;
 
+import com.example.quizit.enums.Provider;
 import jakarta.persistence.*;
 import lombok.*;
 

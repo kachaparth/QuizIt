@@ -1,4 +1,4 @@
-package com.example.quizit.entities;
+package com.example.quizit.enums;
 
 public enum Provider {
 

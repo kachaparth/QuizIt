@@ -1,8 +1,7 @@
 package com.example.quizit.dtos;
 
 
-import com.example.quizit.entities.Provider;
-import jakarta.persistence.*;
+import com.example.quizit.enums.Provider;
 import lombok.*;
 import java.time.Instant;
 import java.util.UUID;

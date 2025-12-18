@@ -29,6 +29,7 @@ public class QuizServiceImpl implements QuizService {
         if(quizRepository.existsByQuizNameAndHostId(quizDto.getQuizName(), quizDto.getHost())){
             throw new IllegalArgumentException("Quiz already exists");
         }
+
         Quiz quiz = modelMapper.map(quizDto, Quiz.class);
         Quiz savedQuiz = quizRepository.save(quiz);
         return modelMapper.map(savedQuiz, QuizDto.class);
