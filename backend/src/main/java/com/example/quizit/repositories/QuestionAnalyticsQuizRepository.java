@@ -11,5 +11,4 @@ public interface QuestionAnalyticsQuizRepository extends JpaRepository<QuestionA
     boolean existsByQuestion_QuestionId(UUID questionId);
     Optional<QuestionAnalyticsQuiz> getQuestionAnalyticsQuizByQuestion_QuestionId(UUID questionId);
     Optional<QuestionAnalyticsQuiz> getQuestionAnalyticsQuizByQuiz_QuizId(UUID quizQuizId);
-
 }

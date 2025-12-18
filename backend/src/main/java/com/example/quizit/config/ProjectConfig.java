@@ -1,8 +1,10 @@
 package com.example.quizit.config;
 
 
+import com.example.quizit.dtos.QuestionAnalyticsQuizDto;
 import com.example.quizit.dtos.QuizAnalyticsDto;
 import com.example.quizit.dtos.QuizDto;
+import com.example.quizit.entities.QuestionAnalyticsQuiz;
 import com.example.quizit.entities.Quiz;
 import com.example.quizit.entities.QuizAnalytics;
 import org.modelmapper.ModelMapper;
@@ -34,7 +36,12 @@ public class ProjectConfig {
                     m.map(src -> src.getWinnerUser().getId(),
                             QuizAnalyticsDto::setWinnerUserId);
                 });
-
+        mapper.typeMap(QuestionAnalyticsQuiz.class, QuestionAnalyticsQuizDto.class)
+                .addMappings(m -> {
+                    m.map(src -> src.getQuiz().getQuizId(), QuestionAnalyticsQuizDto::setQuizId);
+                    m.map(src -> src.getQuestion().getQuestionId(), QuestionAnalyticsQuizDto::setQuestionId);
+                    m.map(src -> src.getFastestUser().getId(), QuestionAnalyticsQuizDto::setFastestUserId);
+                });
         return mapper;
     }
 }
