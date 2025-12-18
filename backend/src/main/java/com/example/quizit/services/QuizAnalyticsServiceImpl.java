@@ -41,6 +41,8 @@ public class QuizAnalyticsServiceImpl implements QuizAnalyticsService {
         Quiz quizRef = quizRepository.getReferenceById(dto.getQuizId());
         User userRef = userRepository.getReferenceById(dto.getWinnerUserId());
 
+        System.out.println(quizRef.getQuizId());
+        System.out.println(userRef.getId());
         QuizAnalytics quizAnalytics = QuizAnalytics.builder()
                 .quiz(quizRef)
                 .winnerUser(userRef)
