@@ -8,6 +8,8 @@ import RunQuiz from './RunQuiz.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RunQuiz />
+    <CreateQuiz />
+
+    
   </StrictMode>,
 )
