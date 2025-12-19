@@ -1,73 +1,62 @@
-const dummyAnalytics = {
-    participantName: "Parth",
-    questions: [
-        {
-            questionId: "q1",
-            questionText: "What is the time complexity of Binary Search?",
-            options: {
-                A: "O(n)",
-                B: "O(log n)",
-                C: "O(n log n)",
-                D: "O(1)",
-            },
-            selectedAnswer: "B",
-            correctAnswer: "B",
-            isCorrect: true,
-            timeSpent: 25,
-            tabSwitchCount: 1,
-        },
-        {
-            questionId: "q2",
-            questionText: "Which data structure uses FIFO?",
-            options: {
-                A: "Stack",
-                B: "Tree",
-                C: "Queue",
-                D: "Graph",
-            },
-            selectedAnswer: "C",
-            correctAnswer: "C",
-            isCorrect: true,
-            timeSpent: 18,
-            tabSwitchCount: 0,
-        },
-        {
-            questionId: "q3",
-            questionText: "Which sorting algorithm is stable?",
-            options: {
-                A: "Quick Sort",
-                B: "Heap Sort",
-                C: "Merge Sort",
-                D: "Selection Sort",
-            },
-            selectedAnswer: "A",
-            correctAnswer: "C",
-            isCorrect: false,
-            timeSpent: 40,
-            tabSwitchCount: 3,
-        },
-    ],
-};
-
 import { useEffect, useState } from "react";
 
 export default function UserAnalytics() {
-    const [data, setData] = useState(null);
+    const participantId = "bbe91674-2977-4bc2-81b9-72089e3b8752";
+
+    const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // simulate backend response
-        setData(dummyAnalytics);
+        async function loadAnalytics() {
+            try {
+                // 1️⃣ Fetch analytics for participant
+                const analyticsRes = await fetch(
+                    `http://localhost:3000/quizit/question-analytics-user/participant/${participantId}`
+                );
+                const analyticsList = await analyticsRes.json();
+
+                // 2️⃣ Fetch question details for each analytics entry
+                const mergedData = await Promise.all(
+                    analyticsList.map(async (qa) => {
+                        const qRes = await fetch(
+                            `http://localhost:3000/quizit/question/${qa.questionId}`
+                        );
+                        const question = await qRes.json();
+
+                        return {
+                            questionId: qa.questionId,
+                            questionText: question.content,
+                            options: question.options,
+                            correctAnswer: question.correctAnswer?.answer,
+                            selectedAnswer:
+                                qa.selectedAnswer?.answer || qa.selectedAnswer?.key,
+                            isCorrect: qa.isCorrect,
+                            timeSpent: qa.timeSpent,
+                            tabSwitchCount: qa.tabSwitchCount,
+                        };
+                    })
+                );
+
+                setQuestions(mergedData);
+                setLoading(false);
+            } catch (err) {
+                console.error("Failed to load user analytics", err);
+                setLoading(false);
+            }
+        }
+
+        loadAnalytics();
     }, []);
 
-    if (!data) return <div className="p-6">Loading...</div>;
+    if (loading) return <div className="p-6">Loading user analytics...</div>;
 
     return (
         <div className="p-8 max-w-5xl mx-auto">
             <h1 className="text-2xl font-bold mb-6">
-                User Analytics – {data.participantName}
+                User Analytics – Participant
             </h1>
 
-            {data.questions.map((q, index) => (
+            {questions.map((q, index) => (
                 <div
                     key={q.questionId}
                     className="border rounded-lg p-4 mb-6"
