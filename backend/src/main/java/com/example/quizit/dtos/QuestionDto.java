@@ -26,4 +26,15 @@ public class QuestionDto {
     private Integer duration;
     private String questionType;
     private DifficultyLevel difficultyLevel;
+
+    private QuestionForUserDto toQuestionForUserDto(QuestionDto dto) {
+        QuestionForUserDto userDto = new QuestionForUserDto();
+        userDto.setQuestionId(dto.getQuestionId());
+        userDto.setQuizId(dto.getQuizId());
+        userDto.setContent(dto.getContent());
+        userDto.setOptions(dto.getOptions());
+        userDto.setDuration(dto.getDuration());
+        userDto.setQuestionType(dto.getQuestionType());
+        return userDto;
+    }
 }

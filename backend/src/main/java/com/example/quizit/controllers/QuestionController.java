@@ -1,6 +1,8 @@
 package com.example.quizit.controllers;
 
 import com.example.quizit.dtos.QuestionDto;
+import com.example.quizit.dtos.QuestionForUserDto;
+import com.example.quizit.mapper.QuestionToQuestionUserMapper;
 import com.example.quizit.services.interfaces.QuestionService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final QuestionToQuestionUserMapper questionMapper;
 
     @PostMapping("/question")
     public ResponseEntity<QuestionDto> createQuestion(@RequestBody QuestionDto question) {
@@ -25,6 +28,16 @@ public class QuestionController {
     @GetMapping("/questions/{quizid}")
     public ResponseEntity<List<QuestionDto>> getQuestionsOfQuiz(@PathVariable String quizid) {
         return ResponseEntity.ok(questionService.getAllQuestionsOfQuiz(quizid));
+    }
+
+    @GetMapping("/questionsOnly/{quizId}")
+    public ResponseEntity<List<QuestionForUserDto>> getOnlyQuestionsForQuiz(@PathVariable String quizId){
+       return ResponseEntity.ok(
+               questionService.getAllQuestionsOfQuiz(quizId)
+                .stream()
+               .map(questionMapper::toUserDto)
+               .toList()
+       );
     }
 
     @GetMapping("/question/{uuid}")
