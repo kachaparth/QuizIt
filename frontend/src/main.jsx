@@ -5,9 +5,11 @@ import App from './App.jsx'
 import Dashboard from './Dashboard.jsx'
 import CreateQuiz from './CreateQuiz.jsx'
 import RunQuiz from './RunQuiz.jsx'
+import Analytics from "./Analytics.jsx";
+import UserAnalytics from "./UserAnalytics.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RunQuiz />
+     <UserAnalytics/>
   </StrictMode>,
 )
