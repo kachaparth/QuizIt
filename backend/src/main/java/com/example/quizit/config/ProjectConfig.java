@@ -18,30 +18,6 @@ public class ProjectConfig {
     @Bean
     public ModelMapper modelMapper() {
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration()
-                .setAmbiguityIgnored(true);
-        mapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT);
-        mapper.typeMap(Quiz.class, QuizDto.class)
-                .addMappings(m ->
-                        m.map(src -> src.getHost().getId(), QuizDto::setHost)
-                );
-
-        mapper.typeMap(QuizAnalytics.class, QuizAnalyticsDto.class)
-                .addMappings(m -> {
-                    m.map(src -> src.getQuiz().getQuizId(),
-                            QuizAnalyticsDto::setQuizId);
-
-                    m.map(src -> src.getWinnerUser().getId(),
-                            QuizAnalyticsDto::setWinnerUserId);
-                });
-        mapper.typeMap(QuestionAnalyticsQuiz.class, QuestionAnalyticsQuizDto.class)
-                .addMappings(m -> {
-                    m.map(src -> src.getQuiz().getQuizId(), QuestionAnalyticsQuizDto::setQuizId);
-                    m.map(src -> src.getQuestion().getQuestionId(), QuestionAnalyticsQuizDto::setQuestionId);
-                    m.map(src -> src.getFastestUser().getId(), QuestionAnalyticsQuizDto::setFastestUserId);
-                });
-        return mapper;
+        return new ModelMapper();
     }
 }
