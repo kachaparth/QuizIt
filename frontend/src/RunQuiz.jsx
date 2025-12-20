@@ -113,7 +113,6 @@ export default function RunQuiz() {
         </p> */}
         <Link to={`/quizAnalytics/${quizId}`}>
           <button
-            onClick={() => alert("Result stored (dummy)")}
             className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
           >
             View Analytics
