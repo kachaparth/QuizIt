@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 export default function UserAnalytics() {
   const [analytics, setAnalytics] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { quizId } = useParams();
 
   useEffect(() => {
     Promise.all([
@@ -12,7 +14,7 @@ export default function UserAnalytics() {
       ).then((res) => res.json()),
 
       fetch(
-        "http://localhost:3000/quizit/questions/41d1237d-8a7f-4472-a14c-dffc7f48ef84"
+        `http://localhost:3000/quizit/questions/${quizId}`
       ).then((res) => res.json()),
     ])
       .then(([analyticsData, questionData]) => {

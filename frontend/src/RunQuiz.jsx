@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router";
 
 export default function RunQuiz() {
   const [questions, setQuestions] = useState([]);
@@ -8,6 +9,7 @@ export default function RunQuiz() {
   const [timeLeft, setTimeLeft] = useState(null);
   const [loading, setLoading] = useState(true);
   const currentQuestion = questions[currentIndex];
+  const { quizId } = useParams();
 
   const sendQuestionAnalytics = () => {
     if (!currentQuestion) return;
@@ -74,9 +76,7 @@ export default function RunQuiz() {
   }, [timeLeft, finished]);
 
   useEffect(() => {
-    fetch(
-      "http://localhost:3000/quizit/questionsOnly/41d1237d-8a7f-4472-a14c-dffc7f48ef84"
-    )
+    fetch(`http://localhost:3000/quizit/questionsOnly/${quizId}`)
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);
@@ -95,7 +95,6 @@ export default function RunQuiz() {
     });
   };
 
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen text-lg">
@@ -105,8 +104,6 @@ export default function RunQuiz() {
   }
 
   if (finished) {
-
-
     return (
       <div className="p-8 max-w-3xl mx-auto text-center">
         <h1 className="text-3xl font-bold mb-4">Quiz Completed 🎉</h1>
@@ -114,13 +111,14 @@ export default function RunQuiz() {
         {/* <p className="text-xl font-semibold mb-6">
           Score: {score} / {questions.length}
         </p> */}
-
-        <button
-          onClick={() => alert("Result stored (dummy)")}
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-        >
-          View Analytics
-        </button>
+        <Link to={`/quizAnalytics/${quizId}`}>
+          <button
+            onClick={() => alert("Result stored (dummy)")}
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+          >
+            View Analytics
+          </button>
+        </Link>
       </div>
     );
   }

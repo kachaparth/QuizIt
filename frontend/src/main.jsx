@@ -7,9 +7,25 @@ import CreateQuiz from './CreateQuiz.jsx'
 import RunQuiz from './RunQuiz.jsx'
 import Analytics from "./Analytics.jsx";
 import UserAnalytics from "./UserAnalytics.jsx";
+import { createBrowserRouter, RouterProvider } from 'react-router'
+
+const router = createBrowserRouter([
+  {
+    path: "/dashboard",
+    element: <Dashboard />
+  },
+  {
+    path: "/runQuiz/:quizId",
+    element: <RunQuiz />
+  },
+  {
+    path: "/quizAnalytics/:quizId",
+    element: <UserAnalytics />
+  }
+])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <UserAnalytics/>
+    <RouterProvider router={router} />
   </StrictMode>,
 )
