@@ -26,3 +26,26 @@ server:
 
 # JVM args (NOTE: this is usually NOT read from application.yml)
 
+# ===============================
+# JWT Security Configuration
+# ===============================
+
+security:
+  jwt:
+    # 🔐 SECRET (from environment variable)
+    secret: ${JWT_SECRET}
+
+    # Non-secret identifiers
+    issuer: ${JWT_ISSUER}
+
+    # Token validity (seconds)
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS}
+    refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS}
+
+    # Cookie configuration
+    refresh-token-cookie-name: ${JWT_REFRESH_COOKIE_NAME}
+
+    cookie-secure: ${JWT_COOKIE_SECURE}
+    cookie-http-only: ${JWT_COOKIE_HTTP_ONLY}
+    cookie-domain: ${JWT_COOKIE_DOMAIN}
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE}

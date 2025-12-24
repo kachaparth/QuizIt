@@ -1,10 +1,15 @@
 package com.example.quizit.dtos;
 
 
+import com.example.quizit.entities.Role;
 import com.example.quizit.enums.Provider;
+
 import lombok.*;
+
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -25,6 +30,9 @@ public class UserDto {
     private Boolean enable;
     private Instant createdAt;
     private Instant updatedAt;
+
     private Provider provider;
+
+    private Set<Role> roles;
 
 }
