@@ -37,7 +37,7 @@ export default function Dashboard() {
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={() => alert("Navigate to Create Quiz page")}
         >
-          ➕ Create Quiz
+          Create Quiz
         </button>
       </div>
 
@@ -63,18 +63,18 @@ export default function Dashboard() {
                   className="px-3 py-1 border rounded hover:bg-gray-100"
                   onClick={() => alert(`Edit quiz ${quiz.quizId}`)}
                 >
-                  ✏️ Edit
+                  Edit
                 </button>
 
                 <button
                   className="px-3 py-1 border rounded hover:bg-gray-100"
                   onClick={() => alert(`View analytics for ${quiz.quizId}`)}
                 >
-                  📊 Analytics
+                  Analytics
                 </button>
                 <Link to={`/runQuiz/${quiz.quizId}`}>
                   <button className="px-3 py-1 border rounded hover:bg-gray-100">
-                    ▶️ RunQuiz
+                    Run Quiz
                   </button>
                 </Link>
               </div>

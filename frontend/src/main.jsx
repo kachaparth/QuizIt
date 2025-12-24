@@ -5,11 +5,15 @@ import App from './App.jsx'
 import Dashboard from './Dashboard.jsx'
 import CreateQuiz from './CreateQuiz.jsx'
 import RunQuiz from './RunQuiz.jsx'
-import Analytics from "./Analytics.jsx";
 import UserAnalytics from "./UserAnalytics.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router'
+import LandingPage from './LandingPage.jsx'
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />
+  },
   {
     path: "/dashboard",
     element: <Dashboard />
