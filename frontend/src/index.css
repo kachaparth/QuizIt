@@ -7,3 +7,13 @@
 .auth-primary-btn {
   @apply mt-2 py-3 rounded-lg bg-cyan-600 text-white font-semibold hover:bg-cyan-700 transition;
 }
+
+.dashboard-btn {
+  @apply px-4 py-2 rounded-lg border border-gray-200
+  text-gray-700 hover:bg-gray-50 transition;
+}
+
+.dashboard-btn-primary {
+  @apply px-4 py-2 rounded-lg bg-cyan-600 text-white
+  hover:bg-cyan-700 transition;
+}
