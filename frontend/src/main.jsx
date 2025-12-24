@@ -8,11 +8,16 @@ import RunQuiz from './RunQuiz.jsx'
 import UserAnalytics from "./UserAnalytics.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import LandingPage from './LandingPage.jsx'
+import AuthPage from './AuthPage.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LandingPage />
+  },
+  {
+    path: "/auth",
+    element: <AuthPage />
   },
   {
     path: "/dashboard",

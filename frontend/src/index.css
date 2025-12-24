@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.auth-input {
+  @apply mb-4 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500;
+}
+
+.auth-primary-btn {
+  @apply mt-2 py-3 rounded-lg bg-cyan-600 text-white font-semibold hover:bg-cyan-700 transition;
+}

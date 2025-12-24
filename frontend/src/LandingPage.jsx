@@ -15,6 +15,7 @@ import GoogleFormsHeader from "./Components/GoogleFormsHeader";
 import Option from "./Components/Option";
 import Legend from "./Components/Legend";
 import FormOption from "./Components/formOption";
+import { Link } from "react-router";
 
 export default function LandingPage() {
   return (
@@ -22,9 +23,11 @@ export default function LandingPage() {
       <nav className="flex items-center justify-between px-8 py-4 bg-transparent">
         <div className="text-2xl font-bold text-white">QuizIt</div>
         <div className="flex items-center gap-8">
-          <button className="px-6 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition">
-            Get Started
-          </button>
+          <Link to="/auth">
+            <button className="px-6 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition">
+              Get Started
+            </button>
+          </Link>
         </div>
       </nav>
 
