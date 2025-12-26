@@ -2,11 +2,47 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
 export default function Dashboard() {
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState([
+    {
+      idx: 0,
+      quizId: "41d1237d-8a7f-4472-a14c-dffc7f48ef84",
+      createdAt: "2025-12-18T17:27:47.399Z",
+      startTime: "2025-12-20T10:00:00Z",
+      endTime: "2025-12-20T11:00:00Z",
+      mode: "SERVER",
+      quizName: "Java Basics Quiz",
+      quizType: "MCQ",
+      hostUserId: "a94d6b81-bfff-4742-8dbe-92d684a93000",
+    },
+    {
+      idx: 1,
+      quizId: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      createdAt: null,
+      startTime: null,
+      endTime: null,
+      mode: null, // Draft quiz
+      quizName: "Parth",
+      quizType: null,
+      hostUserId: "a94d6b81-bfff-4742-8dbe-92d684a93000",
+    },
+    {
+      idx: 2,
+      quizId: "f3a2c1d4-9b72-4c11-babc-71a0e6e91234",
+      createdAt: "2025-12-19T09:00:00Z",
+      startTime: null,
+      endTime: "2025-12-25T23:59:00Z",
+      mode: "RANDOMIZED",
+      quizName: "DSA Practice Quiz",
+      quizType: "MCQ",
+      hostUserId: "a94d6b81-bfff-4742-8dbe-92d684a93000",
+    },
+  ]);
   const [loading, setLoading] = useState(true);
 
   const hostId = "a94d6b81-bfff-4742-8dbe-92d684a93000";
-
+  const isDraftQuiz = (quiz) => !quiz.mode;
+  const isServerQuiz = (quiz) => quiz.mode === "SERVER";
+  const isRandomizedQuiz = (quiz) => quiz.mode === "RANDOMIZED";
   useEffect(() => {
     fetch(`http://localhost:3000/quizit/quiz/host/${hostId}`)
       .then((res) => res.json())
@@ -28,13 +64,10 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-teal-50 px-6 py-10">
       <div className="max-w-6xl mx-auto">
-
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              Quiz Dashboard
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-800">Quiz Dashboard</h1>
             <p className="text-gray-500 mt-1">
               Create, manage, and run your quizzes
             </p>
@@ -57,7 +90,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Created Quizzes */}
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Your Quizzes
         </h2>
@@ -87,26 +119,68 @@ export default function Dashboard() {
                       Mode: <span className="font-medium">{quiz.mode}</span>
                     </p>
                   </div>
-
-                  <span className="px-3 py-1 text-xs rounded-full bg-cyan-100 text-cyan-700">
-                    Active
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full ${
+                      isDraftQuiz(quiz)
+                        ? "bg-gray-100 text-gray-600"
+                        : isServerQuiz(quiz)
+                        ? "bg-green-100 text-green-700"
+                        : "bg-blue-100 text-blue-700"
+                    }`}
+                  >
+                    {isDraftQuiz(quiz)
+                      ? "Draft"
+                      : isServerQuiz(quiz)
+                      ? "Live (Host-controlled)"
+                      : "Self-paced"}
                   </span>
                 </div>
 
                 <div className="flex gap-3 flex-wrap">
-                  <button className="dashboard-btn">
-                    Edit
-                  </button>
+                  <button className="dashboard-btn">Edit</button>
 
-                  <button className="dashboard-btn">
-                    Analytics
-                  </button>
-
-                  <Link to={`/runQuiz/${quiz.quizId}`}>
+                  {isDraftQuiz(quiz) && (
                     <button className="dashboard-btn-primary">
-                      Run Quiz
+                      Complete Setup
                     </button>
-                  </Link>
+                  )}
+
+                  {/* Server-based quiz actions */}
+                  {isServerQuiz(quiz) && (
+                    <>
+                      <button className="dashboard-btn">Analytics</button>
+
+                      <Link to={`/runQuiz/${quiz.quizId}`}>
+                        <button className="dashboard-btn-primary">
+                          Run Quiz
+                        </button>
+                      </Link>
+                    </>
+                  )}
+
+                  {/* Randomized quiz actions */}
+                  {isRandomizedQuiz(quiz) && (
+                    <>
+                      <button className="dashboard-btn">Analytics</button>
+
+                      <Link to={`/quiz/${quiz.quizId}/preview`}>
+                        <button className="dashboard-btn-primary">
+                          Preview
+                        </button>
+                      </Link>
+
+                      <button
+                        className="dashboard-btn"
+                        onClick={() =>
+                          navigator.clipboard.writeText(
+                            `${window.location.origin}/quiz/${quiz.quizId}`
+                          )
+                        }
+                      >
+                        Copy Link
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

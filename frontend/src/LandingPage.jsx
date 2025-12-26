@@ -16,8 +16,26 @@ import Option from "./Components/Option";
 import Legend from "./Components/Legend";
 import FormOption from "./Components/formOption";
 import { Link } from "react-router";
+import { motion } from "motion/react";
 
 export default function LandingPage() {
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.25,
+      },
+    },
+  };
+
+  const card = {
+    hidden: { opacity: 0, y: 40 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
   return (
     <div className="min-h-screen bg-linear-to-br from-cyan-600 to-cyan-700">
       <nav className="flex items-center justify-between px-8 py-4 bg-transparent">
@@ -91,68 +109,92 @@ export default function LandingPage() {
 
           <div className="relative">
             <div className="flex items-center gap-6 bg-white/30 backdrop-blur-xl p-8 rounded-3xl shadow-2xl">
-              <Card
-                title=" "
-                header={<GoogleFormsHeader />}
-                headerClass="bg-purple-500"
+              <motion.div
+                variants={container}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                className="flex gap-10"
               >
-                <div className="space-y-4 text-sm font-roboto">
-                  <div>
-                    <div className="h-3 w-40 bg-gray-300 rounded mb-2" />
-                    <div className="h-3 w-full bg-gray-200 rounded" />
-                  </div>
+                <motion.div
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  variants={card}
+                >
+                  <Card
+                    title=" "
+                    header={<GoogleFormsHeader />}
+                    headerClass="bg-purple-500"
+                  >
+                    <div className="space-y-4 text-sm font-roboto">
+                      <div>
+                        <div className="h-3 w-40 bg-gray-300 rounded mb-2" />
+                        <div className="h-3 w-full bg-gray-200 rounded" />
+                      </div>
 
-                  <div className="space-y-2">
-                    <FormOption />
-                    <FormOption />
-                    <FormOption />
-                    <FormOption />
-                  </div>
+                      <div className="space-y-2">
+                        <FormOption />
+                        <FormOption />
+                        <FormOption />
+                        <FormOption />
+                      </div>
 
-                  <div className="text-xs text-red-500 pt-1">* Required</div>
-                </div>
-              </Card>
+                      <div className="text-xs text-red-500 pt-1">
+                        * Required
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+                <Arrow />
+                <motion.div
+                  variants={card}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <Card title="Quiz Builder">
+                    <div className="space-y-4 text-sm">
+                      <div>
+                        <div className="h-3 w-32 bg-gray-300 rounded mb-2" />
+                        <div className="h-3 w-full bg-gray-200 rounded" />
+                      </div>
 
-              <Arrow />
+                      <div className="space-y-2">
+                        <Option />
+                        <Option />
+                        <Option correct />
+                        <Option />
+                      </div>
 
-              <Card title="Quiz Builder">
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <div className="h-3 w-32 bg-gray-300 rounded mb-2" />
-                    <div className="h-3 w-full bg-gray-200 rounded" />
-                  </div>
+                      <div className="flex justify-between items-center pt-2 border-t">
+                        <span className="text-xs text-gray-500">
+                          Single Correct
+                        </span>
+                        <span className="text-xs font-medium text-teal-600">
+                          +5 pts
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+                <Arrow />
+                <motion.div
+                  variants={card}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <Card title="Analytics">
+                    <div className="flex flex-col items-center">
+                      <div className="relative h-28 w-28 rounded-full bg-[conic-gradient(#14b8a6_0deg_170deg,#fb923c_170deg_280deg,#60a5fa_280deg_360deg)]"></div>
 
-                  <div className="space-y-2">
-                    <Option />
-                    <Option />
-                    <Option correct />
-                    <Option />
-                  </div>
-
-                  <div className="flex justify-between items-center pt-2 border-t">
-                    <span className="text-xs text-gray-500">
-                      Single Correct
-                    </span>
-                    <span className="text-xs font-medium text-teal-600">
-                      +5 pts
-                    </span>
-                  </div>
-                </div>
-              </Card>
-
-              <Arrow />
-
-              <Card title="Analytics">
-                <div className="flex flex-col items-center">
-                  <div className="relative h-28 w-28 rounded-full bg-[conic-gradient(#14b8a6_0deg_170deg,#fb923c_170deg_280deg,#60a5fa_280deg_360deg)]"></div>
-
-                  <div className="mt-4 space-y-2 w-full text-xs">
-                    <Legend color="bg-teal-500" label="Correct" />
-                    <Legend color="bg-orange-400" label="Wrong" />
-                    <Legend color="bg-blue-400" label="Skipped" />
-                  </div>
-                </div>
-              </Card>
+                      <div className="mt-4 space-y-2 w-full text-xs">
+                        <Legend color="bg-teal-500" label="Correct" />
+                        <Legend color="bg-orange-400" label="Wrong" />
+                        <Legend color="bg-blue-400" label="Skipped" />
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </div>
