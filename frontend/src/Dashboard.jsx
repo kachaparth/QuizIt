@@ -80,13 +80,14 @@ export default function Dashboard() {
             >
               Join Quiz
             </button>
-
-            <button
-              className="px-5 py-2 rounded-lg bg-orange-500 text-white
-              hover:bg-orange-600 transition shadow"
-            >
-              Create Quiz
-            </button>
+            <Link to="/createQuiz">
+              <button
+                className="px-5 py-2 rounded-lg bg-orange-500 text-white
+                hover:bg-orange-600 transition shadow"
+              >
+                Create Quiz
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -137,8 +138,9 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex gap-3 flex-wrap">
-                  <button className="dashboard-btn">Edit</button>
-
+                  <Link to={`/quiz/${quiz.quizId}`}>
+                    <button className="dashboard-btn">Edit</button>
+                  </Link>
                   {isDraftQuiz(quiz) && (
                     <button className="dashboard-btn-primary">
                       Complete Setup

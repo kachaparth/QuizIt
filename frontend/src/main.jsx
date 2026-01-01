@@ -9,6 +9,7 @@ import UserAnalytics from "./UserAnalytics.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import LandingPage from './LandingPage.jsx'
 import AuthPage from './AuthPage.jsx'
+import QuizManagementDashboard from './QuizManagementDashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
   {
     path: "/quizAnalytics/:quizId",
     element: <UserAnalytics />
+  },
+  {
+    path: "/createQuiz",
+    element: <CreateQuiz />
+  },
+  {
+    path: "/quiz/:quizId",
+    element: <QuizManagementDashboard />
   }
 ])
 

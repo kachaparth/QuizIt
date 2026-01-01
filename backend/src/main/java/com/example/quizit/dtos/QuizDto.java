@@ -13,12 +13,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class QuizDto {
+
     private UUID quizId;
     private String quizName;
     private UUID host;
-    private String quizType;
     private QuizMode mode;
     private Instant startTime;
     private Instant endTime;
+    private boolean allowGuest;
+    private boolean shuffleQuestions;
+    private boolean showLeaderboard;
     private Instant createdAt;
 }

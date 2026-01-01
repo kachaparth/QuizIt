@@ -42,7 +42,7 @@ public class QuestionAnalyticsUser {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "selected_answer", columnDefinition = "jsonb")
-    private Map<String, Object>  selectedAnswer;
+    private Map<String, Object> selectedAnswer;
 
     @Column(name = "is_correct")
     private Boolean isCorrect;
