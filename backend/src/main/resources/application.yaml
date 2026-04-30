@@ -60,7 +60,7 @@ spring:
     arguments: --add-opens=java.base/sun.misc=ALL-UNNAMED
   mail:
     host: smtp.gmail.com
-    port: 465
+    port: 587
     username: ${EMAIL_SERVICE_EMAIL}
     password: ${EMAIL_SERVICE_PASSWORD}
     properties:
