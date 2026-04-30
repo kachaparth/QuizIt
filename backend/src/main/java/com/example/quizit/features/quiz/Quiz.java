@@ -69,7 +69,7 @@ public class Quiz {
     @Column(nullable = false, name = "allow_all_authenticated")
     private boolean allowAllAuthenticated;
 
-    @Column(name = "hold_result")
+    @Column(name = "hold_result", nullable = true)
     private boolean holdResult = false;
 
     @PrePersist
