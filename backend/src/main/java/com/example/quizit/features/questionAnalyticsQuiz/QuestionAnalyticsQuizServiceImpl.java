@@ -179,7 +179,8 @@ public class QuestionAnalyticsQuizServiceImpl implements QuestionAnalyticsQuizSe
         Map<UUID, Participant> fastestMap = fastestList.stream()
                 .collect(Collectors.toMap(
                         row -> (UUID) row[0],
-                        row -> (Participant) row[1]
+                        row -> (Participant) row[1],
+                        (existing, duplicate) -> existing
                 ));
 
         // 5️⃣ Fetch existing analytics rows (1 query)
