@@ -70,7 +70,7 @@ public class Quiz {
     private boolean allowAllAuthenticated;
 
     @Column(name = "hold_result", nullable = true)
-    private boolean holdResult = false;
+    private Boolean holdResult;
 
     @PrePersist
     protected void onCreate() {
