@@ -37,11 +37,11 @@ spring:
 
   datasource:
     hikari:
-      maximum-pool-size: 2
-      minimum-idle: 1
-      idle-timeout: 10000
-      max-lifetime: 25000
-      connection-timeout: 20000
+      maximum-pool-size: 10
+      minimum-idle: 3
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
     url: ${DB_URL}
     username: postgres
     password: ${DB_PASSWORD}
