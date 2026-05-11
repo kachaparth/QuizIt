@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,7 +23,7 @@ jobs:
           java-version: 21
 
       - name: Build Backend
-        run: mvn clean package -DskipTests
+        run: cd backend && mvn clean package -DskipTests
 
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
