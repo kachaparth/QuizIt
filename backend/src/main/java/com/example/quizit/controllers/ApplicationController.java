@@ -27,6 +27,6 @@ public class ApplicationController {
     public ResponseEntity<String> getHealth(){
 
         userRepository.count();// DB health
-        return ResponseEntity.ok("QuizIt is finally running!!!!!");
+        return ResponseEntity.ok("QuizIt is finally running...");
     }
 }
