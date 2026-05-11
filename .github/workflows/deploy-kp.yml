@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
@@ -20,16 +26,17 @@ jobs:
           java-version: 21
 
       - name: Build Backend
+        working-directory: ./backend
         run: mvn clean package -DskipTests
 
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST_KP }}
-          username: ${{ secrets.EC2_USER }}
+          username: ${{ secrets.EC2_USER_KP }}
           key: ${{ secrets.EC2_SSH_KEY_KP }}
           script: |
-            cd /home/ubuntu/QuizIt/backend
+            cd /home/ubuntu/QuizIt
 
             echo "Pulling latest code..."
             git pull origin main
