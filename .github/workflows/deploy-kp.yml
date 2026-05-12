@@ -39,13 +39,16 @@ jobs:
             cd /home/ubuntu/QuizIt
 
             echo "Pulling latest code..."
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
 
-            echo "Stopping old containers..."
-            docker compose down
+            echo "Building backend..."
+            cd backend
+            chmod +x mvnw
+            ./mvnw clean package -DskipTests
 
-            echo "Rebuilding and starting containers..."
-            docker compose up --build -d
+            echo "Stopping old backend..."
+            pkill -f 'java -jar' || true
 
-            echo "Cleaning unused Docker images..."
-            docker image prune -af
+            echo "Starting new backend..."
+            nohup java -jar target/*.jar > app.log 2>&1 &
