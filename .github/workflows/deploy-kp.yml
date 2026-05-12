@@ -35,6 +35,7 @@ jobs:
           host: ${{ secrets.EC2_HOST_KP }}
           username: ${{ secrets.EC2_USER_KP }}
           key: ${{ secrets.EC2_SSH_KEY_KP }}
+          port: 22
           script: |
             cd /home/ubuntu/QuizIt
 
@@ -42,13 +43,16 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
-            echo "Building backend..."
             cd backend
-            chmod +x mvnw
-            ./mvnw clean package -DskipTests
 
-            echo "Stopping old backend..."
-            pkill -f 'java -jar' || true
+            echo "Stopping old backend container..."
+            docker compose down || true
 
-            echo "Starting new backend..."
-            nohup java -jar target/*.jar > app.log 2>&1 &
+            echo "Building updated backend..."
+            docker compose build --no-cache
+
+            echo "Starting backend..."
+            docker compose up -d
+
+            echo "Cleaning old Docker images..."
+            docker image prune -af
