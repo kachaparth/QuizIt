@@ -49,7 +49,7 @@ jobs:
             docker compose down || true
 
             echo "Building updated backend..."
-            docker compose build --no-cache
+            docker compose build
 
             echo "Starting backend..."
             docker compose up -d
