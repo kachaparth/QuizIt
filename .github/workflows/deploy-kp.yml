@@ -19,40 +19,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Java 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Build Backend
-        working-directory: ./backend
-        run: mvn clean package -DskipTests
-
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST_KP }}
           username: ${{ secrets.EC2_USER_KP }}
           key: ${{ secrets.EC2_SSH_KEY_KP }}
-          port: 22
           script: |
             cd /home/ubuntu/QuizIt
-
-            echo "Pulling latest code..."
-            git fetch origin
-            git reset --hard origin/main
+            git pull origin main
 
             cd backend
 
-            echo "Stopping old backend container..."
-            docker compose down || true
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
 
-            echo "Building updated backend..."
-            docker compose build
-
-            echo "Starting backend..."
-            docker compose up -d
-
-            echo "Cleaning old Docker images..."
             docker image prune -af
