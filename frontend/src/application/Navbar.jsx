@@ -402,7 +402,7 @@ export default function Navbar() {
                     >
                       {user.username
                         ? user.username.charAt(0).toUpperCase()
-                        : "U"}
+                        : "P"}
                     </Avatar>
                   </IconButton>
                 </Tooltip>
