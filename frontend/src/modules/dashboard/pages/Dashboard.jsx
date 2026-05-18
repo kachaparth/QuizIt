@@ -106,7 +106,7 @@ export default function Dashboard() {
       try {
         setLoading(true);
         const data = await getQuizsByHostId(user.id);
-        const activeQuizzes = data.filter(quiz => quiz.status !== "ENDED");
+        const activeQuizzes = data.filter(quiz => (quiz.status !== "ENDED" && quiz.status != "RESULTS_PUBLISHED"));
         setQuizzes(activeQuizzes);
       } catch (err) {
         console.log(err)
