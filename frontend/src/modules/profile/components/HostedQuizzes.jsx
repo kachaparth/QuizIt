@@ -48,7 +48,7 @@ export default function HostedQuizzes() {
       console.log("hosted", response);
       // Filter for ENDED status as per your requirement
       const endedQuizzes = response
-        ? response.filter((q) => q.status === "ENDED")
+        ? response.filter((q) => (q.status === "ENDED" || q.status == "RESULTS_PUBLISHED"))
         : [];
       setQuizzes(endedQuizzes);
     } catch (err) {
