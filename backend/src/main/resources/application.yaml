@@ -4,7 +4,7 @@ spring:
       host: ${REDIS_HOST}
       username: ${REDIS_USERNAME}
       password: ${REDIS_PASSWORD}
-      port: 18543
+      port: 15974
       connect-timeout: 3000
       lettuce:
         pool:
