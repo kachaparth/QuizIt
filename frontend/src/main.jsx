@@ -38,7 +38,7 @@ import DashboardPdfViewer from "./application/DashboardPdfViewer.jsx";
 const router = createBrowserRouter([
   // 1. NO NAVBAR ROUTES (Landing, Auth, Live Quiz Taking)
   {
-    path:"/dashboard",
+    path:"/PowerBI",
     element:<DashboardPdfViewer/>
   },
   {
