@@ -496,7 +496,16 @@ export default function QuizSettings({ quiz }) {
             </div>
             <button
               onClick={() => handleEndQuizEarly()}
-              className="w-full md:w-auto px-6 py-3 bg-amber-100 text-amber-700 border border-amber-200 rounded-2xl hover:bg-amber-500 hover:text-white font-black text-xs transition-all shadow-sm uppercase tracking-widest"
+              disabled={
+                quiz.status === "ENDED" || quiz.status === "RESULTS_PUBLISHED"
+              }
+              className={`w-full md:w-auto px-6 py-3 rounded-2xl font-black text-xs transition-all shadow-sm uppercase tracking-widest border
+    ${
+      quiz.status === "ENDED" || quiz.status === "RESULTS_PUBLISHED"
+        ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+        : "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-500 hover:text-white"
+    }
+  `}
             >
               End Quiz Early
             </button>
