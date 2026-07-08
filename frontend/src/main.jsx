@@ -34,10 +34,13 @@ import AdminDashboard from "./modules/admin/pages/AdminDashboard.jsx";
 import AdminApprovalPage from "./modules/admin/pages/AdminApprovalPage.jsx";
 import StudentDashboard from "./modules/student/pages/StudentDashboard.jsx";
 import RoleProtectedRoute from "./RoleProtectedRoute.jsx";
-
+import DashboardPdfViewer from "./application/DashboardPdfViewer.jsx";
 const router = createBrowserRouter([
   // 1. NO NAVBAR ROUTES (Landing, Auth, Live Quiz Taking)
-
+  {
+    path:"/dashboard",
+    element:<DashboardPdfViewer/>
+  },
   {
     path: "/",
     element: <LandingPage />, // Landing page has its own internal nav
