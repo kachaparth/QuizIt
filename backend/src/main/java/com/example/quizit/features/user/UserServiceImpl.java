@@ -50,10 +50,12 @@ public class UserServiceImpl implements UserService {
 
         User user = modelMapper.map(userDto, User.class);
         user.setProvider(userDto.getProvider()!=null?userDto.getProvider():Provider.LOCAL);
-        if(user.getProvider() == Provider.LOCAL)
-        {
-            user.setEnable(false);
-        }
+//        if(user.getProvider() == Provider.LOCAL)
+//        {
+//            user.setEnable(false);
+//        }
+        //remove otp verification for now!
+        user.setEnable(true);
         // 3. Dynamic Role Assignment
         Set<Role> roleEntities = new HashSet<>();
         boolean isTeacherRequest = false;
@@ -82,15 +84,15 @@ public class UserServiceImpl implements UserService {
             registrationApprovalService.notifyAdminsForTeacherSignup(userDto);
         }
 
-
-        String otp = String.valueOf(new Random().nextInt(900000) + 100000);
-
-        OtpVerification otpEntity = new OtpVerification();
-        otpEntity.setEmail(userDto.getEmail());
-        otpEntity.setOtp(otp);
-        otpEntity.setExpiryTime(LocalDateTime.now().plusMinutes(5));
-        otpVerificationRepository.save(otpEntity);
-        emailService.sendOtp(otpEntity.getEmail(), otp);
+        //remove otp verification for now
+//        String otp = String.valueOf(new Random().nextInt(900000) + 100000);
+//
+//        OtpVerification otpEntity = new OtpVerification();
+//        otpEntity.setEmail(userDto.getEmail());
+//        otpEntity.setOtp(otp);
+//        otpEntity.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+//        otpVerificationRepository.save(otpEntity);
+//        emailService.sendOtp(otpEntity.getEmail(), otp);
 
         return modelMapper.map(savedUser, UserDto.class);
     }

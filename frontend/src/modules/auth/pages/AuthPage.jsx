@@ -44,7 +44,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const login = useAuth((state) => state.login);
 
-  const [step, setStep] = useState("verify"); // "auth" or "verify"
+  const [step, setStep] = useState("auth"); // "auth" or "verify"
   const [verificationError, setVerificationError] = useState("");
   const [verificationLoading, setVerificationLoading] = useState(false);
 
@@ -144,10 +144,19 @@ export default function AuthPage() {
       const userdata = await registerUser(signupPayload);
       console.log("Registration successful:", userdata);
 
-      toast.success("Code sent to your email!");
-      setStep("verify");
-
+      // toast.success("Code sent to your email!");
+      // setStep("verify");
       // setIsSignUp(false);
+
+      //directly sign up without otp verification
+      setStep("auth");
+      setSignupData({
+        username: "",
+        email: "",
+        password: "",
+      });
+      toast.success("Registered successfully; now please log in.")
+      setIsSignUp(false);
     } catch (err) {
       setSignupError(
         err.response?.data?.message || err.message || "Registration failed",

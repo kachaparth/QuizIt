@@ -23,9 +23,10 @@ public class ApplicationController {
         return ResponseEntity.ok("Application Controller Running!");
     }
 
+
+
     @GetMapping("/health")
     public ResponseEntity<String> getHealth(){
-
         userRepository.count();// DB health
         return ResponseEntity.ok("QuizIt Is Running Fine...");
     }

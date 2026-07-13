@@ -21,6 +21,7 @@ import java.nio.file.AccessDeniedException;
 public class GlobalException {
 
 
+    
     Logger logger = LoggerFactory.getLogger(GlobalException.class);
     @ExceptionHandler({
             UsernameNotFoundException.class,
