@@ -4,10 +4,14 @@ package com.example.quizit.features.allowedUser;
 import com.example.quizit.exceptions.ResourceNotFoundException;
 import com.example.quizit.features.quiz.Quiz;
 import com.example.quizit.features.quiz.QuizRepository;
+import com.example.quizit.features.quiz.QuizStatus;
+import com.example.quizit.features.user.User;
+import com.example.quizit.features.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,9 +24,12 @@ import java.util.UUID;
 public class AllowedUserServiceImpl implements AllowedUserSerivce{
     private final QuizRepository quizRepository;
     private final AllowedUserRepository allowedUserRepository;
+    private final UserRepository userRepository;
 
     private static final long TOKEN_EXPIRY_SECONDS = 172800;
 
+    @Value("${app.auth.frontend.base-url}")
+    private String registerUrl;
 
     @Override
     @Transactional
@@ -119,5 +126,51 @@ public class AllowedUserServiceImpl implements AllowedUserSerivce{
                 .toList();
 
         return allowedUsers;
+    }
+
+    @Override
+    public List<AllowedUserQuizDto> getAllQuizzesOfAllowedUser(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        String email = user.getEmail();
+        List<AllowedUser> allowedUsers = allowedUserRepository.findDashboardQuizzes(email);
+
+        List<AllowedUserQuizDto> allowedUserQuizDtos = allowedUsers.stream()
+                .filter(allowedUser -> allowedUser.getQuiz().getCanJoin() != null)
+                .map(allowedUser -> {
+                    Quiz quiz = allowedUser.getQuiz();
+
+                    String registerURL = null;
+                    String joinURL = null;
+
+                    if (allowedUser.getInvitationStatus() == InvitationStatus.SENT ||
+                            allowedUser.getInvitationStatus() == InvitationStatus.FAILED) {
+
+                        registerURL = registerUrl + "/register-exam/"
+                                + quiz.getQuizId() + "/"
+                                + allowedUser.getToken();
+                    }
+
+                    if (allowedUser.getInvitationStatus() == InvitationStatus.REGISTERED &&
+                            Boolean.TRUE.equals(quiz.getCanJoin())) {
+                        joinURL = registerUrl + "/waiting-room/" + quiz.getQuizId();
+                    }
+
+                    return AllowedUserQuizDto.builder()
+                            .quizId(quiz.getQuizId())
+                            .quizTitle(quiz.getQuizName())
+                            .startTime(quiz.getStartTime())
+                            .endTime(quiz.getEndTime())
+                            .invitationStatus(allowedUser.getInvitationStatus())
+                            .canJoin(quiz.getCanJoin())
+                            .registerURL(registerURL)
+                            .joinURL(joinURL)
+                            .build();
+                })
+                .toList();
+        for(AllowedUserQuizDto allowedUserQuizDto : allowedUserQuizDtos){
+            System.out.println(allowedUserQuizDto.getQuizTitle());
+        }
+        return allowedUserQuizDtos;
     }
 }

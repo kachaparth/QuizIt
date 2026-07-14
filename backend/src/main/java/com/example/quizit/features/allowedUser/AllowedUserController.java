@@ -22,4 +22,9 @@ public class AllowedUserController {
             (@PathVariable String quizId,@AuthenticationPrincipal User user) {
         return ResponseEntity.ok().body(allowedUserSerivce.getAllAllowedUser(quizId,user.getId()));
     }
+
+    @GetMapping("/allowed-user/quizzes")
+    public ResponseEntity<List<AllowedUserQuizDto>> getAllowedUserQuizzes(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok().body(allowedUserSerivce.getAllQuizzesOfAllowedUser(user.getId()));
+    }
 }

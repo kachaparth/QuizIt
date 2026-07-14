@@ -3,6 +3,8 @@ package com.example.quizit.features.allowedUser;
 import com.example.quizit.features.quiz.Quiz;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
 
@@ -33,4 +35,20 @@ public interface AllowedUserRepository extends JpaRepository<AllowedUser, UUID> 
     long countAllowedUserByInvitationStatus(InvitationStatus invitationStatus);
 
     Long countAllowedUserByQuiz_QuizIdAndInvitationStatus(UUID quizQuizId, InvitationStatus invitationStatus);
+
+    @Query("""
+    SELECT au
+    FROM AllowedUser au
+    WHERE au.email = :email
+      AND au.invitationStatus IN (
+            com.example.quizit.features.allowedUser.InvitationStatus.SENT,
+            com.example.quizit.features.allowedUser.InvitationStatus.REGISTERED,
+            com.example.quizit.features.allowedUser.InvitationStatus.FAILED
+      )
+      AND au.quiz.status IN (
+      com.example.quizit.features.quiz.QuizStatus.CREATED,
+      com.example.quizit.features.quiz.QuizStatus.STARTED)
+    ORDER BY au.quiz.startTime
+""")
+    List<AllowedUser> findDashboardQuizzes(@Param("email") String email);
 }

@@ -43,7 +43,15 @@ public class InvitationService {
             throw new IllegalArgumentException("User does not belong to quiz");
         }
 
-        sendInvitationInternal(quiz, user);
+        //remove emails for now
+//        sendInvitationInternal(quiz, user);
+        if (user.getInvitationStatus() == InvitationStatus.NOT_SENT ||
+                user.getInvitationStatus() == InvitationStatus.FAILED) {
+
+            user.setInvitationStatus(InvitationStatus.SENT);
+            user.setInvitationSentAt(Instant.now());
+            user.setDeliveryErrorMessage(null);
+        }
     }
     public void sendAllEmail(UUID quizId, UUID hostId) {
 
@@ -60,16 +68,28 @@ public class InvitationService {
                         List.of(InvitationStatus.NOT_SENT, InvitationStatus.FAILED)
                 );
 
-        System.out.println("Starting email sending for quiz " + quizId + ". Total users: " + users.size());
+        //removing emails for now!
+//        System.out.println("Starting email sending for quiz " + quizId + ". Total users: " + users.size());
+//
+//        for (AllowedUser user : users) {
+//            sendSingleEmailTransactional(quiz, user);
+//            try {
+//                Thread.sleep(150);
+//            } catch (InterruptedException ignored) {}
+//        }
+//        System.out.println("Finished sending emails for quiz " + quizId);
 
         for (AllowedUser user : users) {
-            sendSingleEmailTransactional(quiz, user);
-            try {
-                Thread.sleep(150);
-            } catch (InterruptedException ignored) {}
+            user.setInvitationStatus(InvitationStatus.SENT);
+            user.setInvitationSentAt(Instant.now());
+            user.setDeliveryErrorMessage(null);
         }
 
-        System.out.println("Finished sending emails for quiz " + quizId);
+        allowedUserRepository.saveAll(users);
+
+        System.out.println("Published invitations for quiz " + quizId +
+                ". Total users: " + users.size());
+
     }
 
     @Transactional
@@ -88,24 +108,43 @@ public class InvitationService {
 
         List<AllowedUser> users = allowedUserRepository.findAllById(allowedUserIds);
 
-        System.out.println("Starting bulk email sending for quiz " + quizId + ". Total users fetched: " + users.size());
+        //remove emails for now
+//        System.out.println("Starting bulk email sending for quiz " + quizId + ". Total users fetched: " + users.size());
+//
+//        for (AllowedUser user : users) {
+//            if (!user.getQuiz().getQuizId().equals(quizId)) {
+//                System.err.println("Skipping user " + user.getId() + ": Does not belong to quiz " + quizId);
+//                continue;
+//            }
+//
+//            sendSingleEmailTransactional(quiz, user);
+//
+//            try {
+//                Thread.sleep(150);
+//            } catch (InterruptedException ignored) {
+//                Thread.currentThread().interrupt();
+//            }
+//        }
+//
+//        System.out.println("Finished bulk sending emails for quiz " + quizId);
+
+        Instant now = Instant.now();
 
         for (AllowedUser user : users) {
+
             if (!user.getQuiz().getQuizId().equals(quizId)) {
-                System.err.println("Skipping user " + user.getId() + ": Does not belong to quiz " + quizId);
                 continue;
             }
 
-            sendSingleEmailTransactional(quiz, user);
+            if (user.getInvitationStatus() == InvitationStatus.NOT_SENT ||
+                    user.getInvitationStatus() == InvitationStatus.FAILED) {
 
-            try {
-                Thread.sleep(150);
-            } catch (InterruptedException ignored) {
-                Thread.currentThread().interrupt();
+                user.setInvitationStatus(InvitationStatus.SENT);
+                user.setInvitationSentAt(now);
+                user.setDeliveryErrorMessage(null);
             }
         }
-
-        System.out.println("Finished bulk sending emails for quiz " + quizId);
+        allowedUserRepository.saveAll(users);
     }
 
     @Transactional

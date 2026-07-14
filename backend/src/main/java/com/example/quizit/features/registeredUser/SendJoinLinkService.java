@@ -41,20 +41,25 @@ public class SendJoinLinkService {
         List<AllowedUser> users =
                 allowedUserRepository.findAllByQuiz_QuizIdAndRegistered(quizId, true);
 
-        try {
-            for (AllowedUser user : users) {
-                try {
-                    sendJoinLinkInternal(quiz, user);
-                    Thread.sleep(150);
-                } catch (Exception e) {
-                    System.out.println("Failed to send mail to: " + user.getEmail());
-                    e.printStackTrace();
-                }
-            }
-        } finally {
-            // GUARANTEED to run
-            quizService.scheduleQuizEnd(quiz);
-        }
+        //remove emails for now
+//        try {
+//            for (AllowedUser user : users) {
+//                try {
+//                    sendJoinLinkInternal(quiz, user);
+//                    Thread.sleep(150);
+//                } catch (Exception e) {
+//                    System.out.println("Failed to send mail to: " + user.getEmail());
+//                    e.printStackTrace();
+//                }
+//            }
+//        } finally {
+//            // GUARANTEED to run
+//            quizService.scheduleQuizEnd(quiz);
+//        }
+
+        quiz.setCanJoin(true);
+        quizService.scheduleQuizEnd(quiz);
+        quizRepository.save(quiz);
     }
 
     private void sendJoinLinkInternal(Quiz quiz, AllowedUser user) {

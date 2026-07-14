@@ -334,3 +334,8 @@ export const publishResultForQuiz = async (quizId) => {
   const response = await apiClient.post(`/quiz/${quizId}/publish-result`)
   return response.data;
 }
+
+export const getAllowedUserQuizzes = async () => {
+  const response = await apiClient.get(`/allowed-user/quizzes`)
+  return response.data;
+}

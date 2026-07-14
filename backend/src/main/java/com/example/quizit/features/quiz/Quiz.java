@@ -72,6 +72,9 @@ public class Quiz {
     @Column(name = "hold_result", nullable = true)
     private boolean holdResult = false;
 
+    @Column(name = "can_join", nullable = true)
+    private Boolean canJoin = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = Instant.now();

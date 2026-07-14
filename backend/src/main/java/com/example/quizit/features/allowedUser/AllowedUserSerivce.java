@@ -9,4 +9,5 @@ public interface AllowedUserSerivce {
     public void createAllowedUserInBulk(UUID quizId, List<String> emails);
     public void deleleAllowedUserInBulk(UUID quizId, List<String> emails);
     public List<AllowedUserStatusDto> getAllAllowedUser(String quizId,UUID userId);
+    public List<AllowedUserQuizDto> getAllQuizzesOfAllowedUser(UUID userId);
 }

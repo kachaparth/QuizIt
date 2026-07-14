@@ -20,4 +20,5 @@ public class QuizDtoForParticipant{
     private Instant endTime;
     private Integer duration;
     private boolean allowAllAuthenticated;
+    private Boolean canJoin;
 }

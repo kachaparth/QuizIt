@@ -29,4 +29,5 @@ public class QuizDto {
     private List<@Email @NotBlank String> allowedEmails;
     private Instant createdAt;
     private boolean holdResult;
+    private Boolean canJoin;
 }
