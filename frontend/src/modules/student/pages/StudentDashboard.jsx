@@ -4,7 +4,7 @@ import useAuth from "../../../stores/store";
 import useHistoryStore from "../../../stores/historyStore";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { getAllowedUserQuizzes } from "../../../services/authService"; // Adjust path as needed
+import { getAllowedUserQuizzes } from "../../../services/AuthService"; // Adjust path as needed
 import {
   Layout,
   Search,
