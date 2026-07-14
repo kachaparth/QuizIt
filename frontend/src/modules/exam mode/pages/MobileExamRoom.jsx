@@ -28,8 +28,7 @@ const MobileExamRoom = ({
   quizId,
   handleSubmitTest,
   navigationData,
-  isSubmitting,
-  showSubmitModal,
+  openSubmitModal
 }) => {
   const getStatus = useQuestionList((s) => s.getStatus);
 
@@ -65,74 +64,6 @@ const MobileExamRoom = ({
 
       {/* 2. Main Question Area */}
       <main className="flex-1 overflow-y-auto px-5 py-6 bg-white">
-        {isSubmitting && (
-          <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-slate-950/95 px-8">
-            <div className="h-16 w-16 animate-spin rounded-full border-4 border-white/20 border-t-white" />
-
-            <h2 className="mt-8 text-center text-2xl font-bold text-white">
-              Submitting Test
-            </h2>
-
-            <p className="mt-3 max-w-xs text-center text-sm leading-6 text-slate-300">
-              Please wait while we securely submit your answers.
-            </p>
-
-            <div className="mt-8 rounded-xl bg-yellow-500/10 border border-yellow-500/30 p-4">
-              <p className="text-center text-xs font-medium text-yellow-300">
-                ⚠️ Do not close the app, refresh the page, or switch tabs until
-                the submission is complete.
-              </p>
-            </div>
-          </div>
-        )}
-        {showSubmitModal && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 z-50 bg-black/50"
-              onClick={() => !isSubmitting && setShowSubmitModal(false)}
-            />
-
-            {/* Bottom Sheet */}
-            <div className="fixed bottom-0 left-0 right-0 z-[60] rounded-t-3xl bg-white p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
-              {/* Drag Handle */}
-              <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-gray-300" />
-
-              <div className="flex justify-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
-                  <Send className="text-red-600" size={24} />
-                </div>
-              </div>
-
-              <h2 className="mt-5 text-center text-xl font-bold">
-                Submit Test?
-              </h2>
-
-              <p className="mt-3 text-center text-sm leading-6 text-gray-500">
-                Once submitted, you won't be able to edit your answers. Please
-                make sure you've reviewed all questions.
-              </p>
-
-              <div className="mt-8 space-y-3">
-                <button
-                  onClick={handleSubmitTest}
-                  disabled={isSubmitting}
-                  className="w-full rounded-2xl bg-red-600 py-4 font-semibold text-white active:scale-[0.98]"
-                >
-                  Yes, Submit Test
-                </button>
-
-                <button
-                  onClick={() => setShowSubmitModal(false)}
-                  disabled={isSubmitting}
-                  className="w-full rounded-2xl border border-gray-300 bg-white py-4 font-semibold text-gray-700 active:scale-[0.98]"
-                >
-                  Continue Exam
-                </button>
-              </div>
-            </div>
-          </>
-        )}
         <div className="flex justify-between items-center mb-6">
           <span className="bg-slate-900 text-white px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-wider">
             Question {currentQIndex + 1} / {questionIds.length}
@@ -240,7 +171,7 @@ const MobileExamRoom = ({
           </div>
 
           <button
-            onClick={() => setShowSubmitModal(true)}
+            onClick={openSubmitModal}
             className="w-full mt-8 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xl shadow-slate-200"
           >
             Submit Assessment <Send size={16} />

@@ -28,6 +28,8 @@ import {
 } from "../../../services/AuthService";
 import Arrow from "../../landing/components/Arrow";
 import MobileExamRoom from "./MobileExamRoom";
+import SubmitConfirmationModal from "../component/SubmitConfirmationModal";
+import SubmissionOverlay from "../component/SubmissionOverlay";
 
 export default function ExamRoom() {
   const { quizId } = useParams();
@@ -686,6 +688,13 @@ export default function ExamRoom() {
   }
   return (
     <>
+      <SubmitConfirmationModal
+        open={showSubmitModal}
+        onClose={() => setShowSubmitModal(false)}
+        onSubmit={handleSubmitTest}
+        isSubmitting={isSubmitting}
+      />
+      <SubmissionOverlay open={isSubmitting} />
       <div className="hidden md:block">
         <div className="h-screen w-full bg-slate-100 flex flex-col overflow-hidden select-none">
           {/* HEADER */}
@@ -721,50 +730,6 @@ export default function ExamRoom() {
             {/* MAIN AREA */}
             <main className="flex-1 flex flex-col bg-white overflow-y-auto p-6 md:p-12 lg:p-16">
               {/* ... inside main ... */}
-              {showSubmitModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                  <div className="bg-white rounded-2xl p-6 w-[90%] max-w-md shadow-2xl">
-                    <h2 className="text-xl font-bold mb-2">Submit Test?</h2>
-
-                    <p className="text-gray-600 mb-6">
-                      Once you submit your test, you won't be able to change
-                      your answers. Are you sure you want to continue?
-                    </p>
-
-                    <div className="flex justify-end gap-3">
-                      <button
-                        disabled={isSubmitting}
-                        onClick={() => setShowSubmitModal(false)}
-                        className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
-                      >
-                        Cancel
-                      </button>
-
-                      <button
-                        disabled={isSubmitting}
-                        onClick={handleSubmitTest}
-                        className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
-                      >
-                        Yes, Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              {isSubmitting && (
-                <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center">
-                  <div className="h-14 w-14 rounded-full border-4 border-white/30 border-t-white animate-spin" />
-
-                  <h2 className="mt-8 text-white text-2xl font-bold">
-                    Submitting your test...
-                  </h2>
-
-                  <p className="mt-2 text-gray-300 text-center max-w-md">
-                    Please wait. Do not refresh, close this tab, or navigate
-                    away until the submission is complete.
-                  </p>
-                </div>
-              )}
               <div className="max-w-4xl w-full mx-auto flex flex-col h-full">
                 {/* Question Header */}
                 <div className="flex justify-between items-center mb-8 border-b pb-4">
@@ -1004,8 +969,7 @@ export default function ExamRoom() {
           quizId={quizId}
           handleSubmitTest={handleSubmitTest}
           navigationData={navigationData}
-          isSubmitting={isSubmitting}
-          showSubmitModal={showSubmitModal}
+          openSubmitModal={() => setShowSubmitModal(true)}
         />
       </div>
     </>
