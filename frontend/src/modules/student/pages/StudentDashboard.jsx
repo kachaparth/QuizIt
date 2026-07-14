@@ -236,7 +236,6 @@ export default function StudentDashboard() {
           ) : (
             <motion.div
               variants={containerVars}
-              initial="hidden"
               animate="show"
               className="grid md:grid-cols-2 lg:grid-cols-2 gap-8"
             >

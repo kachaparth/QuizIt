@@ -225,7 +225,9 @@ export const checkStatusForRegistered = async (token) => {
 };
 
 export const startExamQuiz = async (quizId, participantId) => {
-  const response = await apiClient.post(`/exam-room/${quizId}/start`);
+  const response = await apiClient.post(`/exam-room/${quizId}/start`, {
+    participantId: participantId
+  });
   return response.data;
 };
 
@@ -239,6 +241,7 @@ export const switchQuestion = async (
     `/exam-room/${quizId}/switchTo/${targetIndex}`,
     {
       tabSwitchCount: tabSwitchCount,
+      participantId : participantId
     },
   );
 
@@ -248,13 +251,19 @@ export const switchQuestion = async (
 export const submitAnswer = async (quizId, participantId, selectedAnswer) => {
   const response = await apiClient.post(
     `/exam-room/${quizId}/submit-answer`,
-    selectedAnswer,
+    {
+      ...selectedAnswer,
+      participantId: participantId
+    }
   );
   return response.data;
 };
 
 export const submitTest = async (quizId, participantId) => {
-  const response = await apiClient.post(`/exam-room/${quizId}/submit-test`);
+  const response = await apiClient.post(`/exam-room/${quizId}/submit-test`, {
+    participantId: participantId
+  });
+  return response.data;
 };
 
 export const importGoogleForm = async (quizId, formUrl) => {
