@@ -38,8 +38,8 @@ import DashboardPdfViewer from "./application/DashboardPdfViewer.jsx";
 const router = createBrowserRouter([
   // 1. NO NAVBAR ROUTES (Landing, Auth, Live Quiz Taking)
   {
-    path:"/PowerBI",
-    element:<DashboardPdfViewer/>
+    path: "/PowerBI",
+    element: <DashboardPdfViewer />,
   },
   {
     path: "/",
@@ -171,24 +171,36 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        // Parent Security Wrapper
-        element: <SecurityProvider />,
-        children: [
-          {
-            path: "/waiting-room/:quizId",
-            element: <PreQuizWaitingRoom />,
-          },
-          {
-            path: "/exam/:quizId/session",
-            element: <ExamWaitingRoom />,
-          },
-          {
-            path: "exam/:quizId/room",
-            element: <ExamRoom />,
-          },
-          // You can add the actual Quiz component here too
-        ],
+        path: "/waiting-room/:quizId",
+        element: <PreQuizWaitingRoom />,
       },
+      {
+        path: "/exam/:quizId/session",
+        element: <ExamWaitingRoom />,
+      },
+      {
+        path: "exam/:quizId/room",
+        element: <ExamRoom />,
+      },
+      // {
+      //   // Parent Security Wrapper
+      //   element: <SecurityProvider />,
+      //   children: [
+      //     {
+      //       path: "/waiting-room/:quizId",
+      //       element: <PreQuizWaitingRoom />,
+      //     },
+      //     {
+      //       path: "/exam/:quizId/session",
+      //       element: <ExamWaitingRoom />,
+      //     },
+      //     {
+      //       path: "exam/:quizId/room",
+      //       element: <ExamRoom />,
+      //     },
+      //     // You can add the actual Quiz component here too
+      //   ],
+      // },
     ],
   },
 ]);

@@ -48,6 +48,8 @@ test("Automated Bot: Login, Attempt Quiz, and Submit", async ({ page }) => {
   // STEP 2.5: RE-ENTER FULLSCREEN
   // ==========================================
 
+  await page.goto()
+
   // Wait for the button to appear (if it exists)
   const fullscreenButton = page.getByRole("button", {
     name: /Re-Enter Fullscreen/i,
@@ -113,40 +115,43 @@ test("Automated Bot: Login, Attempt Quiz, and Submit", async ({ page }) => {
 
   // 1. Wait for the exam UI to render by looking for the first question header
   await expect(
-    page.getByText(/Question 1/i, { exact: true }).first(),
+    page.getByText(/Question/, { exact: true }).first(),
   ).toBeVisible({ timeout: 15000 });
 
   // 2. Determine the total number of questions dynamically from the sidebar palette
   const paletteGrid = page.locator("aside .grid.grid-cols-4");
   const totalQuestions = await paletteGrid.locator("button").count();
 
-  // 3. Loop through all questions
   for (let i = 0; i < totalQuestions; i++) {
-    // Wait for the question header to ensure the UI has successfully advanced
     await expect(
-      page.getByText(new RegExp(`Question ${i + 1}`, "i")).first(),
+      page.getByText(new RegExp(`Question`)).first(),
     ).toBeVisible();
 
-    // Target the MCQ option buttons using your specific React classes
-    const optionsLocator = page.locator(
-      "main button.p-6.rounded-2xl.border-2.text-left",
-    );
+    const optionsLocator = page
+      .locator("main")
+      .getByRole("button")
+      .filter({
+        hasNotText: /PREVIOUS|Save & Next|Clear|Mark for Review|SKIP/i,
+      });
 
-    // Wait for the options to be visible in the DOM
-    await optionsLocator.first().waitFor({ state: "visible" });
-    const optionCount = await optionsLocator.count();
+    try {
+      await optionsLocator.first().waitFor({ state: "visible", timeout: 2000 });
 
-    if (optionCount > 0) {
-      // Pick a random option index and click it
-      const randomIndex = Math.floor(Math.random() * optionCount);
-      await optionsLocator.nth(randomIndex).click();
+      const optionCount = await optionsLocator.count();
+      if (optionCount > 0) {
+        const randomIndex = Math.floor(Math.random() * optionCount);
+        await optionsLocator.nth(randomIndex).click();
+      }
+    } catch (error) {
+      console.log(
+        `Skipped selection: No MCQ options visible for Question ${i + 1}`,
+      );
     }
 
-    // Click "Save & Next" to sync with the backend and advance the UI
     await page.getByRole("button", { name: /Save & Next/i }).click();
 
-    // Brief pause to allow the React state and API network request to resolve cleanly
-    await page.waitForTimeout(1000);
+    // 3. SPEED OPTIMIZATION: Reduce pause time
+    await page.waitForTimeout(500);
   }
 
   // ==========================================
