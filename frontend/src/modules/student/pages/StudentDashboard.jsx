@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router"; // Note: typically 'react-router-dom' in v6
 import useAuth from "../../../stores/store";
 import useHistoryStore from "../../../stores/historyStore";
@@ -35,6 +35,20 @@ export default function StudentDashboard() {
   const [invitedQuizzes, setInvitedQuizzes] = useState([]);
   const [loadingInvited, setLoadingInvited] = useState(false);
 
+  const fetchInvitedQuizzes = useCallback(async (isSilent = false) => {
+    if (!isSilent) setLoadingInvited(true);
+
+    try {
+      const data = await getAllowedUserQuizzes();
+      setInvitedQuizzes(data);
+    } catch (error) {
+      if (!isSilent) toast.error("Failed to load invited quizzes.");
+      console.error(error);
+    } finally {
+      if (!isSilent) setLoadingInvited(false);
+    }
+  }, []);
+
   // --- Auth & Initial Fetch ---
   useEffect(() => {
     if (!checkLogin()) {
@@ -42,26 +56,23 @@ export default function StudentDashboard() {
       return;
     }
 
+    let intervalId;
+
     if (user?.id) {
       fetchHistory(user.id);
-      fetchInvitedQuizzes();
-    }
-  }, [user?.id, checkLogin, fetchHistory, navigate]);
+      fetchInvitedQuizzes(false);
 
-  // --- Helpers ---
-  const fetchInvitedQuizzes = async () => {
-    setLoadingInvited(true);
-    try {
-      const data = await getAllowedUserQuizzes();
-      console.log(data);
-      setInvitedQuizzes(data);
-    } catch (error) {
-      toast.error("Failed to load invited quizzes.");
-      console.error(error);
-    } finally {
-      setLoadingInvited(false);
+      intervalId = setInterval(() => {
+        fetchInvitedQuizzes(true);
+      }, 5000); // 5000 milliseconds = 5 seconds
     }
-  };
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [user?.id, checkLogin, fetchHistory, navigate, fetchInvitedQuizzes]);
 
   const handleRefresh = async () => {
     if (!user?.id) return;
@@ -69,7 +80,7 @@ export default function StudentDashboard() {
       if (activeTab === "participated") {
         await fetchHistory(user.id, { force: true });
       } else {
-        await fetchInvitedQuizzes();
+        await fetchInvitedQuizzes(false);
       }
       toast.success("Updated successfully!");
     } catch (err) {
