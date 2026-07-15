@@ -26,8 +26,8 @@ public class AsyncInvitationWorker {
 
     @Async
     public void processBulkInvitations(Quiz quiz, List<AllowedUser> users) {
-        System.out.println("Starting background bulk email worker for quiz: " + quiz.getQuizId());
-
+        System.out.println("Starting background bulk email worker for quiz: " + quiz.getQuizId() + " " + Instant.now());
+        System.out.println("Async thread = " + Thread.currentThread().getName());
         for (AllowedUser user : users) {
             String link = registerUrl + "/register-exam/" + quiz.getQuizId() + "/" + user.getToken();
 

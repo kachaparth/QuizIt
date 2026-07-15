@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,7 +77,10 @@ public class QuizController {
     public ResponseEntity<Void> sendAllEmail(@PathVariable UUID quizId, Authentication authentication){
         User user = (User) authentication.getPrincipal();
         UUID userId = user.getId();
+        System.out.println("Controller start " + Instant.now());
+        System.out.println("Controller Thread " + Thread.currentThread().getName());
         invitationService.sendAllEmail(quizId, userId);
+        System.out.println("Controller returning " + Instant.now());
         return ResponseEntity.noContent().build();
     }
 

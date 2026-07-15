@@ -87,9 +87,11 @@ public class InvitationService {
         }
 
         allowedUserRepository.saveAll(users);
+        System.out.println("Before async " +  Instant.now());
         if (!users.isEmpty()) {
             asyncInvitationWorker.processBulkInvitations(quiz, users);
         }
+        System.out.println("After async " +  Instant.now());
         System.out.println("Published invitations for quiz " + quizId +
                 ". Total users: " + users.size());
 

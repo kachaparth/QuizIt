@@ -171,36 +171,24 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/waiting-room/:quizId",
-        element: <PreQuizWaitingRoom />,
+        // Parent Security Wrapper
+        element: <SecurityProvider />,
+        children: [
+          {
+            path: "/waiting-room/:quizId",
+            element: <PreQuizWaitingRoom />,
+          },
+          {
+            path: "/exam/:quizId/session",
+            element: <ExamWaitingRoom />,
+          },
+          {
+            path: "exam/:quizId/room",
+            element: <ExamRoom />,
+          },
+          // You can add the actual Quiz component here too
+        ],
       },
-      {
-        path: "/exam/:quizId/session",
-        element: <ExamWaitingRoom />,
-      },
-      {
-        path: "exam/:quizId/room",
-        element: <ExamRoom />,
-      },
-      // {
-      //   // Parent Security Wrapper
-      //   element: <SecurityProvider />,
-      //   children: [
-      //     {
-      //       path: "/waiting-room/:quizId",
-      //       element: <PreQuizWaitingRoom />,
-      //     },
-      //     {
-      //       path: "/exam/:quizId/session",
-      //       element: <ExamWaitingRoom />,
-      //     },
-      //     {
-      //       path: "exam/:quizId/room",
-      //       element: <ExamRoom />,
-      //     },
-      //     // You can add the actual Quiz component here too
-      //   ],
-      // },
     ],
   },
 ]);
