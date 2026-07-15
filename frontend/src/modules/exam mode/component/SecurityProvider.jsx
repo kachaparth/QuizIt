@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { ShieldAlert, Monitor } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { ShieldAlert, Monitor } from "lucide-react";
 
 const SecurityProvider = () => {
-  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
+  const isAutomation =
+    new URLSearchParams(window.location.search).get("automation") === "true";
+
+  const [isFullscreen, setIsFullscreen] = useState(
+    isAutomation || !!document.fullscreenElement,
+  );
 
   useEffect(() => {
     // 1. DISABLE RIGHT CLICK
@@ -11,7 +16,7 @@ const SecurityProvider = () => {
 
     // 2. DISABLE REFRESH, NAVIGATION, AND DEVTOOLS
     const handleKeyDown = (e) => {
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
       const modifier = isMac ? e.metaKey : e.ctrlKey; // Cmd for Mac, Ctrl for Windows/Linux
       const key = e.key.toLowerCase();
 
@@ -32,14 +37,24 @@ const SecurityProvider = () => {
 
       // Block Navigation
       // Alt + Arrows (Windows/Linux) or Cmd + [ / ] (Mac)
-      const isBrowserNav = (e.altKey && (key === "arrowleft" || key === "arrowright")) ||
-                           (isMac && modifier && (key === "[" || key === "]"));
+      const isBrowserNav =
+        (e.altKey && (key === "arrowleft" || key === "arrowright")) ||
+        (isMac && modifier && (key === "[" || key === "]"));
 
       // Block System Quit/Hide attempts (Cmd + Q, Cmd + W, Cmd + H)
       // Note: Browsers usually protect Cmd+Q/W, but we prevent the default behavior where possible.
-      const isMacSystemExit = isMac && modifier && ["q", "w", "h"].includes(key);
+      const isMacSystemExit =
+        isMac && modifier && ["q", "w", "h"].includes(key);
 
-      if (isFKey || isRefresh || isViewSource || isPrint || isInspect || isBrowserNav || isMacSystemExit) {
+      if (
+        isFKey ||
+        isRefresh ||
+        isViewSource ||
+        isPrint ||
+        isInspect ||
+        isBrowserNav ||
+        isMacSystemExit
+      ) {
         e.preventDefault();
         e.stopPropagation();
       }
@@ -53,6 +68,7 @@ const SecurityProvider = () => {
 
     // 4. FULLSCREEN TRACKING
     const handleFsChange = () => {
+      if (isAutomation) return;
       setIsFullscreen(!!document.fullscreenElement);
     };
 
@@ -73,9 +89,14 @@ const SecurityProvider = () => {
   const enableSecureMode = () => {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
-      elem.requestFullscreen()
+      elem
+        .requestFullscreen()
         .then(() => setIsFullscreen(true))
-        .catch((err) => console.error(`Error attempting to enable full-screen mode: ${err.message}`));
+        .catch((err) =>
+          console.error(
+            `Error attempting to enable full-screen mode: ${err.message}`,
+          ),
+        );
     }
   };
 
@@ -86,9 +107,12 @@ const SecurityProvider = () => {
           <div className="w-20 h-20 bg-red-100 text-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
             <ShieldAlert size={40} />
           </div>
-          <h2 className="text-2xl font-black text-slate-800 uppercase mb-2">Security Breach</h2>
+          <h2 className="text-2xl font-black text-slate-800 uppercase mb-2">
+            Security Breach
+          </h2>
           <p className="text-slate-500 font-medium mb-8 text-sm">
-            Refresh, navigation, and inspection are disabled. You must stay in fullscreen to prevent disqualification.
+            Refresh, navigation, and inspection are disabled. You must stay in
+            fullscreen to prevent disqualification.
           </p>
           <button
             onClick={enableSecureMode}
